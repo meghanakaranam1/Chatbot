@@ -1,0 +1,46 @@
+services:
+  # Alo-Veda Full Stack Application
+  - type: web
+    name: alo-veda-chatbot
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python deploy.py --mode full --env production
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: API_HOST
+        value: 0.0.0.0
+      - key: API_PORT
+        value: 10000
+      - key: FRONTEND_PORT
+        value: 8501
+      - key: LOG_LEVEL
+        value: INFO
+      - key: PYTHONPATH
+        value: /opt/render/project/src
+    healthCheckPath: /health
+    port: 10000
+    
+    # Auto-deploy from main branch
+    autoDeploy: true
+    
+    # Environment-specific settings
+    region: oregon
+    
+    # Resource limits (free tier)
+    disk:
+      name: alo-veda-disk
+      size: 1GB
+      
+  # Optional: Separate backend service (if you want to split)
+  # - type: web
+  #   name: alo-veda-backend
+  #   env: python
+  #   plan: free
+  #   buildCommand: pip install -r requirements.txt
+  #   startCommand: uvicorn backend.main:app --host 0.0.0.0 --port 10000
+  #   envVars:
+  #     - key: ENVIRONMENT
+  #       value: production
+  #   port: 10000 

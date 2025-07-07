@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  alo-veda:
+    build: .
+    container_name: alo-veda-chatbot
+    ports:
+      - "8000:8000"  # FastAPI backend
+      - "8501:8501"  # Streamlit frontend
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - FRONTEND_PORT=8501
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data:/app/data  # Persist database
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  default:
+    name: alo-veda-network 
