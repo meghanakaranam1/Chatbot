@@ -6,11 +6,13 @@ from typing import Dict, List, Any
 import time
 
 # Configuration
+import os
 try:
     from deployment_config import config
     API_BASE_URL = config.API_BASE_URL
 except ImportError:
-    API_BASE_URL = "http://localhost:8000"
+    # Fallback for production or when config is not available
+    API_BASE_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
 # Page config
 st.set_page_config(
